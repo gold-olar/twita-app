@@ -4,7 +4,6 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, Image, Input } from "react-native-elements";
 import logo from "../../../assets/logo.png";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { authError } from "../../actions/authActions";
 
 const Register = ({ navigate, submit, auth }) => {
   const [showPassword, setShowPassword] = useState(false);

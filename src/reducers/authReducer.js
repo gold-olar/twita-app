@@ -2,13 +2,19 @@ import {
   AUTH_ERROR,
   AUTH_LOADING,
   REGISTER_SUCCESS,
+  LOGIN_SUCCESS,
+  CLEAR_ERRORS,
 } from "../actions/actionTypes";
 
 export default function authReducer(state = {}, action) {
-  console.log("E reach here");
+  console.log(state, "current State");
   switch (action.type) {
     case AUTH_LOADING:
       return { ...state, loading: true };
+    case CLEAR_ERRORS:
+      return { ...state, error: false };
+    case LOGIN_SUCCESS:
+      return { ...state, loading: false, token: action.payload };
     case AUTH_ERROR:
       return { ...state, error: action.payload, loading: false };
     case REGISTER_SUCCESS:

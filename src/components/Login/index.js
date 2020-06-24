@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, Image, Input } from "react-native-elements";
 import logo from "../../../assets/logo.png";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-const Login = ({ navigate }) => {
+const Login = ({ navigate, submit, auth }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [data, setData] = useState({});
+  const { error, loading } = auth;
+
+  const handleSubmit = () => submit(data);
+  const handleChange = (value, name) => setData({ ...data, [name]: value });
+
   return (
     <SafeAreaView style={styles.background}>
       <View style={styles.logoArea}>
@@ -12,27 +20,44 @@ const Login = ({ navigate }) => {
         <Text style={styles.logoDesc}>Say how the thing dey do you</Text>
       </View>
       <View style={styles.formArea}>
+        {error && !error.includes("Email") && !error.includes("password") && (
+          <Text style={{ textAlign: "center", color: "red" }}>
+            {" "}
+            {auth.error}{" "}
+          </Text>
+        )}
         <Input
           placeholder="Email"
+          onChangeText={(value) => handleChange(value, "email")}
           errorStyle={{ color: "red" }}
-          //   errorMessage="Enter a valid email address"
+          errorMessage={error && error.includes("Email") && error}
           autoCapitalize="none"
           autoComplete={false}
           style={styles.input}
         />
         <Input
           placeholder="Password"
+          onChangeText={(value) => handleChange(value, "password")}
           errorStyle={{ color: "red" }}
-          //   errorMessage="Password is incorrect"
+          errorMessage={error && error.includes("password") && error}
           autoCapitalize="none"
           autoComplete={false}
           style={styles.input}
-          secureTextEntry={true}
+          secureTextEntry={showPassword ? false : true}
+          rightIcon={
+            <Icon
+              name={showPassword ? "eye-slash" : "eye"}
+              onPress={(e) => setShowPassword(!showPassword)}
+              size={24}
+              color="#ccc"
+            />
+          }
         />
         <Button
-          onPress={() => navigate("Dashboard")}
+          onPress={() => handleSubmit()}
           buttonStyle={styles.loginButton}
           title="Login"
+          loading={loading}
         />
         <TouchableOpacity
           onPress={() => alert("Feature not ready yet")}
