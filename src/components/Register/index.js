@@ -2,11 +2,18 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, Image, Input } from "react-native-elements";
-import logo from "../../../assets/splash.png";
+import logo from "../../../assets/logo.png";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { authError } from "../../actions/authActions";
 
-const Register = ({ navigation: { navigate } }) => {
+const Register = ({ navigate, submit, auth }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [data, setData] = useState({});
+  const { error, loading } = auth;
+
+  const handleSubmit = () => submit(data);
+  const handleChange = (value, name) => setData({ ...data, [name]: value });
+
   return (
     <SafeAreaView style={styles.background}>
       <View style={styles.logoArea}>
@@ -14,26 +21,38 @@ const Register = ({ navigation: { navigate } }) => {
         <Text style={styles.logoDesc}>Say how the thing dey do you</Text>
       </View>
       <View style={styles.formArea}>
+        {error &&
+          !error.includes("Email") &&
+          !error.includes("Password") &&
+          !error.includes("Username") && (
+            <Text style={{ textAlign: "center", color: "red" }}>
+              {" "}
+              {auth.error}{" "}
+            </Text>
+          )}
         <Input
           placeholder="Username"
           errorStyle={{ color: "red" }}
-          //   errorMessage="Enter a valid email address"
+          onChangeText={(value) => handleChange(value, "username")}
           autoCapitalize="none"
           autoComplete={false}
           style={styles.input}
+          errorMessage={error && error.includes("Username") && error}
         />
         <Input
           placeholder="Email"
+          onChangeText={(value) => handleChange(value, "email")}
           errorStyle={{ color: "red" }}
-          //   errorMessage="Enter a valid email address"
+          errorMessage={error && error.includes("Email") && error}
           autoCapitalize="none"
           autoComplete={false}
           style={styles.input}
         />
         <Input
           placeholder="Password"
+          onChangeText={(value) => handleChange(value, "password")}
           errorStyle={{ color: "red" }}
-          //   errorMessage="Password is incorrect"
+          errorMessage={error && error.includes("Password") && error}
           autoCapitalize="none"
           autoComplete={false}
           style={styles.input}
@@ -47,7 +66,12 @@ const Register = ({ navigation: { navigate } }) => {
             />
           }
         />
-        <Button buttonStyle={styles.loginButton} title="Register" />
+        <Button
+          onPress={() => handleSubmit()}
+          buttonStyle={styles.loginButton}
+          title="Register"
+          loading={loading}
+        />
       </View>
       <View style={styles.register}>
         <Text style={styles.forgotPasword}>Have an account ? </Text>

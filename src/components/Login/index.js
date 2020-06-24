@@ -2,9 +2,9 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, Image, Input } from "react-native-elements";
-import logo from "../../../assets/splash.png";
+import logo from "../../../assets/logo.png";
 
-const Login = ({ navigation: { navigate } }) => {
+const Login = ({ navigate }) => {
   return (
     <SafeAreaView style={styles.background}>
       <View style={styles.logoArea}>

@@ -11,7 +11,7 @@ const icons = {
   profile: "user-circle",
   search: "search",
   notifications: "bell",
-  tweets: "twitter",
+  twits: "twitter",
 };
 
 const Dashboard = () => {
@@ -34,7 +34,7 @@ const Dashboard = () => {
           inactiveTintColor: "#ccc",
         }}
       >
-        <Tab.Screen name="Tweets" component={Profile} />
+        <Tab.Screen name="Twits" component={Profile} />
         <Tab.Screen name="Search" component={Profile} />
         <Tab.Screen name="Notifications" component={Profile} />
         <Tab.Screen name="Profile" component={Profile} />
