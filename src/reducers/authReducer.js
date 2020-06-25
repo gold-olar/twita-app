@@ -4,6 +4,7 @@ import {
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
   CLEAR_ERRORS,
+  LOGOUT_USER,
 } from "../actions/actionTypes";
 
 export default function authReducer(state = {}, action) {
@@ -19,6 +20,9 @@ export default function authReducer(state = {}, action) {
       return { ...state, error: action.payload, loading: false };
     case REGISTER_SUCCESS:
       return { ...state, loading: false, register: "success" };
+    case LOGOUT_USER:
+      console.log("Loggin Out");
+      return {};
     default:
       return state;
   }

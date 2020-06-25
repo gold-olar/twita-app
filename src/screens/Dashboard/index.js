@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Profile from "../Profile";
+import TwitsTimeline from "../TwitsTimeline";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { connect } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -14,7 +16,10 @@ const icons = {
   twits: "twitter",
 };
 
-const Dashboard = () => {
+const Dashboard = ({ navigation: { navigate }, auth }) => {
+  useEffect(() => {
+    !auth.token && navigate("Login");
+  }, [auth.token]);
   return (
     <>
       <Tab.Navigator
@@ -34,7 +39,7 @@ const Dashboard = () => {
           inactiveTintColor: "#ccc",
         }}
       >
-        <Tab.Screen name="Twits" component={Profile} />
+        <Tab.Screen name="Twits" component={TwitsTimeline} />
         <Tab.Screen name="Search" component={Profile} />
         <Tab.Screen name="Notifications" component={Profile} />
         <Tab.Screen name="Profile" component={Profile} />
@@ -43,4 +48,10 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = ({ auth }) => {
+  return {
+    auth,
+  };
+};
+
+export default connect(mapStateToProps)(Dashboard);

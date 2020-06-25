@@ -5,6 +5,7 @@ import {
   AUTH_ERROR,
   AUTH_LOADING,
   CLEAR_ERRORS,
+  LOGOUT_USER,
 } from "./actionTypes";
 import { AsyncStorage } from "react-native";
 
@@ -18,6 +19,12 @@ export function authError(err) {
   return {
     type: AUTH_ERROR,
     payload: err,
+  };
+}
+
+export function logOutUser() {
+  return {
+    type: LOGOUT_USER,
   };
 }
 
@@ -37,6 +44,11 @@ export function loginUserSuccess(token) {
 export function clearErrorsSuccess() {
   return {
     type: CLEAR_ERRORS,
+  };
+}
+export function fetchUserDetailsSuccess() {
+  return {
+    type: "",
   };
 }
 
@@ -96,5 +108,47 @@ export function loginUser(data) {
       } = err;
       return dispatch(authError(message));
     }
+  };
+}
+
+export function getUserDetails() {
+  return async function (dispatch) {
+    dispatch(beginApiCall());
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const login = await axios({
+        method: "GET",
+        url: "/users/getUserDetails",
+        data: {
+          ...data,
+        },
+        header,
+      });
+      console.log(login.data);
+
+      return dispatch(fetchUserDetailsSuccess());
+    } catch (err) {
+      const {
+        response: {
+          data: { message },
+        },
+      } = err;
+      return dispatch(authError(message));
+    }
+  };
+}
+
+export function persistUser() {
+  return async function (dispatch) {
+    const token = await AsyncStorage.getItem("token");
+    token && dispatch(loginUserSuccess(token));
+  };
+}
+
+export function logOut() {
+  return async function (dispatch) {
+    await dispatch(logOutUser());
+    await AsyncStorage.clear();
   };
 }

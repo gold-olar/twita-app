@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { loginUser, clearErrors } from "../../actions/authActions";
+import { loginUser, clearErrors, persistUser } from "../../actions/authActions";
 import Login from "../../components/Login";
 import { connect } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { useFocusEffect } from "@react-navigation/native";
 const LoginScreen = ({ navigation: { navigate }, auth, ...props }) => {
   useFocusEffect(
     React.useCallback(() => {
+      props.persistUser();
       props.clearErrors();
     }, [])
   );
@@ -27,6 +28,6 @@ const mapStateToProps = ({ auth }) => {
   };
 };
 
-const mapDispatchToProps = { loginUser, clearErrors };
+const mapDispatchToProps = { loginUser, clearErrors, persistUser };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
